@@ -22,5 +22,5 @@
 
 ## 📁 Repository Structure
 ​/SQL_Scripts 📜: All cleaning and analysis queries.                                                                                                                
-​/Cleaned_Data ✨: CSV files after processing.                                                                                                                      
+​/Cleaned_Data ✨: Excel files after processing.                                                                                                                      
 ​/PowerBI_Dashboard 📊: The final .pbix file.
