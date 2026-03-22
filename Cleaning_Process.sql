@@ -163,42 +163,6 @@ SELECT order_status,order_purchase_timestamp,order_approved_at,order_delivered_c
 FROM Orders_Cleaned
 WHERE order_delivered_carrier_date is null AND order_status='delivered';
 
---Make column to flag delivered ,invoiced, processing or approved with no delivered_carrier_date date as i will exclude them in some cases 
-ALTER TABLE Orders_Cleaned
-ADD delivered_carrier_date_source NVARCHAR(50);
-
-UPDATE Orders_Cleaned
-SET  delivered_carrier_date_source=
-    CASE 
-        WHEN order_delivered_carrier_date is null AND order_status ='delivered'
-        THEN 
-            CASE 
-                WHEN order_delivered_customer_date IS NOT NULL
-                THEN 'From Customer Date'
-                ELSE 'From Estimated Delivery Date'
-            END
-        WHEN order_delivered_carrier_date is null AND order_status IN ('processing','invoiced','approved') 
-        THEN 'Approved Date'
-        ELSE 'Actual'
-    END
-
-SELECT order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date,delivered_carrier_date_source
-FROM Orders_Cleaned
-WHERE order_delivered_carrier_date is null;
-
---Replace null order_delivered_carrier_date with order_delivered_customer_date or order_estimated_delivery_date if order_status is delivered
---Replace null order_delivered_carrier_date with order_approved_at if order_status is 'processing','invoiced' or 'approved'
-UPDATE Orders_Cleaned
-SET order_delivered_carrier_date=
-    CASE 
-        WHEN order_delivered_carrier_date IS NULL AND order_status ='delivered'
-        THEN 
-        COALESCE(order_delivered_customer_date,order_estimated_delivery_date)
-        WHEN order_delivered_carrier_date IS NULL AND order_status IN ('processing','invoiced','approved') 
-        THEN order_approved_at
-        ELSE order_delivered_carrier_date
-    END
-
 --Check if there are nulls in order_delivered_customer_date column
 -- There are 2,965 orders with order_delivered_customer_date is null some of them canceled,created ,delivered,processing,invoiced,unavaliable ,approved or shipped
 SELECT order_status,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date
@@ -213,36 +177,6 @@ WHERE order_delivered_customer_date is null;
 SELECT order_status, order_delivered_customer_date,order_estimated_delivery_date
 FROM Orders_Cleaned
 WHERE order_delivered_customer_date is null AND order_status='delivered';
-
---Make column to flag delivered orders with no customer delivered date as i will exclude them in some cases 
-ALTER TABLE Orders_Cleaned
-ADD delivered_customer_date_quality NVARCHAR(50);
-
-UPDATE Orders_Cleaned
-SET delivered_customer_date_quality=
-   CASE
-        WHEN order_delivered_customer_date IS NULL AND order_status IN ('delivered','approved','invoiced','processing','shipped')
-        THEN 'Estimated_Date'
-        ELSE 'Actual'
-    END
-
-SELECT order_status, order_delivered_customer_date,order_estimated_delivery_date,delivered_customer_date_quality
-FROM Orders_Cleaned
-WHERE order_delivered_customer_date is null;
-
-----Replace null order_delivered_customer_date with estimated_delivery_date
-UPDATE Orders_Cleaned
-SET order_delivered_customer_date=
-    CASE 
-        WHEN order_delivered_customer_date IS NULL AND order_status IN ('delivered','approved','invoiced','processing','shipped')
-        THEN order_estimated_delivery_date
-        ELSE order_delivered_customer_date
-    END
-
---Check cleaning is done right or not
-SELECT order_status,order_delivered_customer_date 
-FROM Orders_Cleaned
-WHERE order_delivered_carrier_date is null;
 
 ----Check if there are nulls in order_estimated_delivery_date column
 -- There are no nulls in order_estimated_delivery_date column
