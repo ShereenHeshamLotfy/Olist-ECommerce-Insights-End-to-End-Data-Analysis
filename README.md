@@ -1,274 +1,224 @@
-# 📦 E-Commerce Analytics Dashboard (Power BI)
+# E-Commerce Analytics Dashboard (Power BI)
 
-A comprehensive end-to-end analytical dashboard built using **Power BI**, providing deep insights into sales, customers, delivery performance, reviews, sellers, and product behaviors and i used **SQL** to clean tables.
-
-This project analyzes a Brazilian e-commerce dataset and transforms raw transactional data into actionable business knowledge.
-
----
-
-# 🗂 Dataset Summary
-
-The dataset contains the following tables:
-
-- **Orders**
-- **Order Items**
-- **Order Payments**
-- **Order Reviews**
-- **Customers**
-- **Sellers**
-- **Products**
-- **Date Table** (created manually)
-
-The data model follows a **Star Schema**, with fact tables centered around orders, order items, and reviews.
+📊 **End-to-End Data Analytics Dashboard** built with **Power BI** to analyze a Brazilian e-commerce dataset.  
+This dashboard provides actionable insights into sales performance, customer behavior, delivery efficiency, reviews & satisfaction, seller performance, and product analytics.
 
 ---
 
-# 🧩 Data Model (Star Schema)
+## 🚀 Project Overview
 
-<img width="1281" height="727" alt="image" src="https://github.com/user-attachments/assets/3e8f6974-7e9c-4a48-a8b9-fdd21bd2f487" />
+This project takes raw transactional data from a Brazilian e-commerce dataset and transforms it into meaningful business insights using:
 
+- **SQL** for data cleaning, transformation, and modeling  
+- **Power BI** for interactive dashboards and visual analytics  
 
-
-# 📊 Dashboard Pages
-
-The dashboard consists of **7 fully-designed analytical pages**.
+The data model follows a **Star Schema** design to support efficient analysis.
 
 ---
 
-# 1️⃣ **Overview Page**
+## 📦 Dataset Summary
 
-This page summarizes the overall performance of the business.
+The dataset contains multiple tables:
 
-## ⭐ KPIs:
+| Table Name | Description |
+|------------|-------------|
+| Orders | Order-level metadata |
+| Order Items | Item-level details per order |
+| Order Payments | Payment method and value |
+| Order Reviews | Ratings and customer feedback |
+| Customers | Customer demographic data |
+| Sellers | Seller demographic data |
+| Products | Product information |
+| Date Table | Created manually for time-based analysis |
+
+<img width="1277" height="732" alt="image" src="https://github.com/user-attachments/assets/5b03a67e-0bd4-4be2-8d4f-cfa870c078e9" />
+
+---
+
+## 📊 Dashboard Pages / Analytical Views
+
+### 1️⃣ Overview Page
+**Key Metrics:**
 - Total Orders  
 - Total Revenue  
 - Total Customers  
 - Average Order Value  
 - Average Delivery Time  
 
-## 📊 Visuals:
-- Revenue Over Time *(Line Chart)*  
-- Best Seller Category *(Bar Chart)*  
-- Order Status Over Time *(Line Chart)*  
-- Reviews by Order *(Bar Chart)*  
-- Revenue by Region *(Map or Bar)*  
+**Insights:**
+- Revenue over time  
+- Best-selling categories  
+- Order trends by status  
+- Regional performance  
 
-## ❓ Business Questions Answered:
-- How is the overall business performing?
-- Which categories drive the most sales?
-- What are the patterns in customer demand over time?
-- Which regions contribute most to revenue?
+**Business Questions Answered:**
+- What are the overall business trends?  
+- Which category contributes most to revenue?  
 
-> **Add Screenshot Here**  
-<img width="1317" height="721" alt="image" src="https://github.com/user-attachments/assets/b767299c-b7f6-4bea-8f68-b8e8608fbaf5" />
----
+**Recommendations:**
+- Focus marketing on top-performing categories to increase revenue.  
+- Monitor underperforming regions for growth opportunities.  
+- Track overall business trends monthly for timely decision-making.
+  
+<img width="1312" height="722" alt="image" src="https://github.com/user-attachments/assets/e927bcb0-0c60-4dfa-af10-e7247e4d5ca8" />
 
-# 2️⃣ **Sales Performance Page**
-
-Focused on revenue, growth, and sales trends.
-
-## ⭐ KPIs:
-- Total Orders  
-- Total Revenue  
-- Average Order Value  
-- Revenue Performance Indicator  
-
-## 📊 Visuals:
-- Revenue Trend Over Time (Line Chart)
-- Gross Revenue by Year
-- Top 10 Categories by Revenue
-- Revenue by Payment Type
-- Revenue by Region (Map / Bar)
-
-## ❓ Business Questions Answered:
-- What payment methods are most used?
-- Which categories generate the highest revenue?
-- How do sales evolve over time?
-- Which regions have the highest purchasing activity?
-
-> **Add Screenshot Here**  
-<img width="1307" height="721" alt="image" src="https://github.com/user-attachments/assets/397717ce-662e-4176-97b2-cea8b33cf27c" />
 
 ---
 
-# 3️⃣ **Customer Insights Page**
+### 2️⃣ Sales Performance
+**KPIs & Visuals:**
+- Revenue evolution trend  
+- Top categories  
+- Revenue by payment methods  
 
-Provides behavioral and demographic customer insights.
+**Questions Answered:**
+- Which payment methods are most popular?  
+- Which regions produce the highest revenue?  
 
-## ⭐ KPIs:
-- Total Customers  
-- Total Customer Orders  
-- Total Customer Revenue  
-- Average Revenue Per Customer  
+**Recommendations:**
+- Use targeted promotions for high-revenue regions.  
+- Optimize payment methods based on popularity to improve conversion.  
+- Consider dynamic pricing for top-performing products.
 
-## 📊 Visuals:
-- Customer Growth Over Time  
-- New vs Returning Customers  
-- Customers by Region  
-- Top Customers by Revenue  
-- Customer Segmentation (High / Medium / Low Value)
-
-### 🎯 Segmentation Logic:
-- **Top 20%** → High Value  
-- **Middle 40%** → Medium Value  
-- **Bottom 40%** → Low Value  
-
-## ❓ Questions Answered:
-- Who are the most valuable customers?
-- How many customers return every year?
-- Which states contain the most active customers?
-- How valuable is each customer segment?
-
-> **Add Screenshot Here**  
-<img width="1307" height="722" alt="image" src="https://github.com/user-attachments/assets/3b92f4d0-18bf-430a-9361-783979078d1a" />
+<img width="1320" height="720" alt="image" src="https://github.com/user-attachments/assets/901810a6-416e-4bfe-a8f8-5efcea7ed152" />
 
 ---
 
-# 4️⃣ **Orders & Delivery Page**
+### 3️⃣ Customer Insights
+**KPIs:**
+- Customer count  
+- Revenue by customer segment  
+- New vs returning customers  
 
-Analyzes fulfillment performance and delivery efficiency.
+**Questions Answered:**
+- Who are the most valuable customers?  
+- How is retention over time?  
 
-## ⭐ KPIs:
-- Total Orders  
-- Delivered Orders  
-- Cancelled Orders  
-- On-Time Delivery Rate  
-- Average Delivery Time  
-- Maximum Delivery Time  
+**Recommendations:**
+- Implement loyalty programs for high-value customers.  
+- Run follow-up campaigns for low-retention segments.  
+- Segment customers and personalize marketing strategies.
 
-## 📊 Visuals:
-- Order Status Over Time  
-- Delivery Status Distribution (Delivered / Pending / Cancelled)
-- Delivery Time Outlier Distribution  
-- Delivery Performance (Early vs On-Time vs Late Delivery)  
-- Detailed Order Table  
+<img width="1313" height="722" alt="image" src="https://github.com/user-attachments/assets/de81c4db-1d36-4324-8e68-e4e4ebd39ca1" />
 
-## ❓ Business Questions Answered:
-- Are deliveries happening on time?
-- How many deliveries are late or extremely late (outliers)?
-- How many orders get cancelled?
-- How does delivery time affect customer experience?
-
-> **Add Screenshot Here**  
-<img width="1328" height="682" alt="image" src="https://github.com/user-attachments/assets/dc2915f3-90da-4ccf-b750-432ee6f4b4e3" />
 
 ---
 
-# 5️⃣ **Reviews & Satisfaction Page**
+### 4️⃣ Orders & Delivery Analysis
+**Metrics:**
+- On-time delivery rate  
+- Average and maximum delivery time  
+- Delivery outlier trends  
 
-Focuses on customer feedback and satisfaction levels.
+**Questions Answered:**
+- How effectively are deliveries managed?  
+- Which regions show late delivery patterns?  
 
-## ⭐ KPIs:
-- Total Reviews  
-- Positive Reviews %  
-- Neutral Reviews %  
-- Negative Reviews %  
-- Average Rating  
+**Recommendations:**
+- Optimize delivery routes to reduce average delivery times.  
+- Investigate late deliveries by region and seller.  
+- Use predictive models to plan for peak order periods.
+
+<img width="1336" height="677" alt="image" src="https://github.com/user-attachments/assets/e6892982-6d9f-4122-8c88-72f373ff8d42" />
+
+
+---
+
+### 5️⃣ Reviews & Satisfaction
+**KPIs:**
+- Average rating  
 - Net Promoter Score (NPS)  
+- Review distribution  
 
-## 📊 Visuals:
-- Reviews by Order  
-- Average Rating Over Time  
-- Ratings for On-Time vs Late Delivery  
-- Detailed Reviews Table  
-- NPS Indicator Card  
+**Questions Answered:**
+- How does delivery performance influence reviews?  
+- What percentage of customers are satisfied?  
 
-## ❓ Questions Answered:
-- What is our customer satisfaction level?
-- How does delivery performance impact reviews?
-- How do ratings trend across time?
-- What percentage of reviews are negative or neutral?
+**Recommendations:**
+- Address recurring issues highlighted in negative reviews.  
+- Encourage satisfied customers to leave reviews.  
+- Correlate delivery time with review scores and improve areas with negative impact.
 
-> **Add Screenshot Here**  
-<img width="1225" height="721" alt="image" src="https://github.com/user-attachments/assets/da121781-c8e1-4478-a4eb-b5d237d84f81" />
+<img width="1230" height="718" alt="image" src="https://github.com/user-attachments/assets/a7323eec-a99c-44d2-92c4-fab2fa1cee0d" />
+
 
 ---
 
-# 6️⃣ **Seller Performance Page**
+### 6️⃣ Seller Performance
+**Metrics:**
+- Total sellers  
+- Seller revenue  
+- Units sold by seller & category  
 
-Evaluates the efficiency and performance of individual sellers.
+**Insights:**
+- Top performing sellers  
+- Revenue patterns per seller  
 
-## ⭐ KPIs:
-- Total Sellers  
-- Seller Revenue  
-- Freight Cost Per Seller  
-- Units Sold  
+**Recommendations:**
+- Support low-performing sellers with training.  
+- Incentivize high-performing sellers for consistency.  
+- Track seller KPIs continuously to maintain quality.
 
-## 📊 Visuals:
-- Top Sellers by Revenue  
-- Seller Revenue Over Time  
-- Freight Cost Trend  
-- Units Sold Per Category Per Seller  
-- Detailed Seller Table  
+<img width="1335" height="662" alt="image" src="https://github.com/user-attachments/assets/ba98dfc7-1645-46f1-a22f-6722a7899a02" />
 
-## ❓ Questions Answered:
-- Which sellers generate the most revenue?
-- How does freight cost vary between sellers?
-- What categories do sellers perform best in?
-- How consistent are sellers across months?
-
-> **Add Screenshot Here**  
-<img width="1327" height="660" alt="image" src="https://github.com/user-attachments/assets/a4177551-34d3-4f68-846c-d9f1e1219b26" />
 
 ---
 
-# 7️⃣ **Products Page**
+### 7️⃣ Products & Category Analysis
+**Visuals:**
+- Price distribution  
+- Revenue by category  
+- Product performance  
 
-Deep dive into product pricing, revenue, and distribution.
+**Questions Answered:**
+- Which products bring the most revenue?  
+- What are the pricing trends across categories?  
 
-## ⭐ KPIs:
-- Total Products  
-- Total Units Sold  
-- Total Categories  
-- Average Product Price  
-- Product Revenue  
+**Recommendations:**
+- Maintain sufficient stock of top-selling products.  
+- Review low-selling products for discounting or removal.  
+- Monitor pricing trends to remain competitive.
 
-## 📊 Visuals:
-- Revenue by Product  
-- Revenue by Product Category  
-- Price Distribution Histogram  
-- Average Price per Category  
-- Average Freight Cost per Category  
-- Detailed Product Table  
+<img width="1332" height="622" alt="image" src="https://github.com/user-attachments/assets/71122f7a-f1db-43b9-bb8f-d20aceb6db77" />
 
-## ❓ Questions Answered:
-- Which products are most profitable?
-- How do prices vary across categories?
-- Are certain categories more expensive or cheaper?
-- Which products bring the most revenue?
-
-> **Add Screenshot Here**  
-<img width="1332" height="622" alt="image" src="https://github.com/user-attachments/assets/2f8fb35c-5707-49ab-a779-45876e5b8fd8" />
 
 ---
 
-# 🧮 Key DAX Measures
+## 🛠 Tools & Technologies Used
 
-> Add a file `/dax/measures.md` or paste your measures here.
+| Technology | Purpose |
+|------------|---------|
+| SQL | Data cleaning & transformation |
+| Power BI | Dashboard visualization |
+| Power Query | Data modeling & ETL |
+| DAX | Custom analytics calculations |
 
-Examples:
+---
 
-```DAX
-Average Delivery Time =
-AVERAGEX(
-    FILTER(Orders, Orders[Is_Outlier] = 0),
-    Orders[Delivery_Time_Days]
-)
 
-Customer_Segment =
-SWITCH(
-    TRUE(),
-    [Customer Revenue] >= [High_Value_Threshold], "High",
-    [Customer Revenue] >= [Medium_Value_Threshold], "Medium",
-    "Low"
-)
+## 📁 How to Run the Dashboard
 
-------
-🛠 Tools & Technologies Used 
-SQL
-Power BI Desktop
-Power Query
-DAX
-Star Schema Modeling
-GitHub
-Data Visualization Principles
+1. Clone the repository  
+   `git clone https://github.com/ShereenHeshamLotfy/Olist-ECommerce-Insights-End-to-End-Data-Analysis.git`
+2. Open the `.pbix` Power BI file  
+3. Connect to the provided dataset files (.csv)
+4. Refresh all visuals to load data
+
+---
+
+## 📎 References & Data Source
+
+The dataset is based on the **Olist Brazilian E‑commerce dataset**, publicly available on Kaggle (orders, products, reviews, customers, sellers, etc.).:contentReference[oaicite:1]{index=1}
+
+---
+
+## 📄 License
+
+This project is shared under the **MIT License** (add LICENSE file).
+
+---
+
+## ⭐ Contributions
+
+Contributions are welcome!  
+Feel free to open issues or submit pull requests.
