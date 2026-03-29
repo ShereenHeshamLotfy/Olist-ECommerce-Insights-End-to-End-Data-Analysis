@@ -263,9 +263,8 @@ SWITCH(
     "Low"
 )
 
---------
-
-# 🛠 Tools & Technologies Used
+------
+🛠 Tools & Technologies Used 
 SQL
 Power BI Desktop
 Power Query
