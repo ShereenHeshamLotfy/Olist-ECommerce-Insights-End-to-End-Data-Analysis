@@ -52,8 +52,14 @@ The dataset contains multiple tables:
 - Regional performance  
 
 **Business Questions Answered:**
-- What are the overall business trends?  
-- Which category contributes most to revenue?  
+- What is the overall business performance?
+- What is the average customer spending and delivery efficiency?
+- How does revenue change over time?
+- Which product categories generate the most revenue?
+- What is the distribution of order statuses?
+- How do customers rate their orders?
+- Where are the customers located?
+
 
 **Recommendations:**
 - Focus marketing on top-performing categories to increase revenue.  
