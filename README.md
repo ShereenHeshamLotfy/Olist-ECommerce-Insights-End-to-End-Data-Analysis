@@ -46,10 +46,12 @@ The dataset contains multiple tables:
 - Average Delivery Time  
 
 **Insights:**
-- Revenue over time  
-- Best-selling categories  
-- Order trends by status  
-- Regional performance  
+- Overall business performance is growing, as shown by the increase in total orders, revenue, and customer base.
+- Revenue shows clear seasonality/trends over the year, indicating peak months and low-activity periods.
+- Certain categories consistently outperform others, making them the main revenue drivers.
+- Most orders fall under specific status types, revealing order management efficiency.
+- Customer satisfaction varies across orders, shown by the distribution of review scores.
+- Customer activity is concentrated in certain regions, indicating strong geographic markets.
 
 **Business Questions Answered:**
 - What is the overall business performance?
@@ -78,9 +80,13 @@ The dataset contains multiple tables:
 - Revenue by payment methods  
 
 **Questions Answered:**
-- Which payment methods are most popular?  
-- Which regions produce the highest revenue?  
-
+- What is the overall sales performance?
+- How much does an average customer spend per order?
+- Is revenue increasing or decreasing over time?
+- Which categories generate the highest revenue?
+- Which payment methods are customers using the most?
+- Which regions contribute the most to sales?
+  
 **Recommendations:**
 - Use targeted promotions for high-revenue regions.  
 - Optimize payment methods based on popularity to improve conversion.  
@@ -97,9 +103,14 @@ The dataset contains multiple tables:
 - New vs returning customers  
 
 **Questions Answered:**
-- Who are the most valuable customers?  
-- How is retention over time?  
-
+- How many customers does the business have?
+- How much revenue do customers generate?
+- How does the customer base grow over time?
+- Are customers returning or mostly new?
+- Which regions have the highest number of customers?
+- Which customers are the most valuable?
+- What are the customer segments based on spending levels?
+  
 **Recommendations:**
 - Implement loyalty programs for high-value customers.  
 - Run follow-up campaigns for low-retention segments.  
@@ -117,8 +128,16 @@ The dataset contains multiple tables:
 - Delivery outlier trends  
 
 **Questions Answered:**
-- How effectively are deliveries managed?  
-- Which regions show late delivery patterns?  
+- How many orders were placed?
+- How many orders were successfully delivered vs canceled?
+- How efficient is the delivery process?
+- How long do deliveries take on average?
+- What is the worst-case delivery delay?
+- How do order statuses trend over time?
+- How does delivery status relate to order status?
+- Are there abnormal delivery delays?
+- What is the overall delivery performance?
+- What are the exact details of all orders?
 
 **Recommendations:**
 - Optimize delivery routes to reduce average delivery times.  
@@ -137,8 +156,14 @@ The dataset contains multiple tables:
 - Review distribution  
 
 **Questions Answered:**
-- How does delivery performance influence reviews?  
-- What percentage of customers are satisfied?  
+- How many reviews were submitted?
+- What is the sentiment distribution?
+- What is the average customer rating?
+- Which orders get the highest or lowest ratings?
+- How does customer satisfaction change over time?
+- How do delivered orders contribute to ratings?
+- What is the NPS score? (Customer loyalty)
+- What are the exact details of each review?
 
 **Recommendations:**
 - Address recurring issues highlighted in negative reviews.  
@@ -160,6 +185,15 @@ The dataset contains multiple tables:
 - Top performing sellers  
 - Revenue patterns per seller  
 
+**Questions Answered:**
+- How many active sellers does the marketplace have?
+- Which sellers generate the most revenue?
+- How much do sellers pay for freight costs?
+- How many units does each seller sell?
+- How does seller performance change over time?
+- Which seller performs best in each product category?
+- What are the detailed metrics for each seller?
+
 **Recommendations:**
 - Support low-performing sellers with training.  
 - Incentivize high-performing sellers for consistency.  
@@ -177,8 +211,15 @@ The dataset contains multiple tables:
 - Product performance  
 
 **Questions Answered:**
-- Which products bring the most revenue?  
-- What are the pricing trends across categories?  
+- How many products and categories exist?
+- How many units were sold in total?
+- What is the average product price?
+- Which products generate the most revenue?
+- Which categories generate the most revenue?
+- How are product prices distributed?
+- What is the average price per category?
+- How much freight cost does each category generate?
+- What are the detailed product-level metrics? 
 
 **Recommendations:**
 - Maintain sufficient stock of top-selling products.  
