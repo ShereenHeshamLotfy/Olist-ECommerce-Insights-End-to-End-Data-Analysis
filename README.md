@@ -247,7 +247,7 @@ The dataset contains multiple tables:
 - Analyze expensive products with low sales—reduce price or run promotions.
 - Reduce freight cost on categories with unusually high shipping charges.
 
-<img width="1335" height="662" alt="image" src="https://github.com/user-attachments/assets/ba98dfc7-1645-46f1-a22f-6722a7899a02" />
+<img width="1378" height="686" alt="image" src="https://github.com/user-attachments/assets/70894f17-6143-440e-a25f-c01824517e67" />
 
 
 ---
@@ -286,7 +286,7 @@ The dataset contains multiple tables:
 - Review low-selling products for discounting or removal.  
 - Monitor pricing trends to remain competitive.
 
-<img width="1332" height="622" alt="image" src="https://github.com/user-attachments/assets/71122f7a-f1db-43b9-bb8f-d20aceb6db77" />
+<img width="1374" height="574" alt="image" src="https://github.com/user-attachments/assets/d80cf8b7-c649-420f-8a5c-468ce04e1470" />
 
 
 ---
