@@ -1,20 +1,30 @@
-# 🛒 Olist E-Commerce Insights – End-to-End Data Analysis
+# 🛒 Olist E-Commerce Analytics – End-to-End Business Intelligence Case Study
 
-This project is an **end-to-end data analytics case study** on the Brazilian Olist e-commerce dataset, designed to transform raw transactional data into **actionable business insights** across sales, customers, delivery performance, reviews, sellers, and products.
+This project analyzes a real-world Brazilian e-commerce dataset to extract actionable insights across **sales performance, customer behavior, delivery efficiency, reviews, sellers, and products**.
 
-The goal is to simulate a real-world business intelligence scenario using SQL and Power BI.
+The objective is to simulate a complete **business intelligence workflow** using SQL and Power BI to support data-driven decision-making.
 
 ---
 
 ## 🚀 Project Overview
 
-This project analyzes e-commerce operations using:
+This project follows a structured analytics pipeline:
 
-- **SQL** → data cleaning, transformation, and modeling  
-- **Power BI** → interactive dashboards and visual storytelling  
-- **Star Schema Data Model** → optimized for analytical performance  
+- **SQL** → Data cleaning, transformation, and modeling  
+- **Power BI** → Interactive dashboards and visual storytelling  
+- **Star Schema Design** → Optimized data model for analysis  
 
-It focuses on answering key business questions related to performance, efficiency, and customer behavior.
+---
+
+## 📊 Business Domains Covered
+
+- Executive Performance Overview  
+- Sales & Revenue Analysis  
+- Customer Behavior & Segmentation  
+- Orders & Delivery Performance  
+- Reviews & Customer Satisfaction  
+- Seller Performance  
+- Product & Category Analysis  
 
 ---
 
