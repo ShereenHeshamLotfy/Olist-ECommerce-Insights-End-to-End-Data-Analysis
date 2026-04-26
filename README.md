@@ -1,73 +1,74 @@
-# E-Commerce Analytics Dashboard (Power BI)
+# 🛒 Olist E-Commerce Insights – End-to-End Data Analysis
 
-📊 **End-to-End Data Analytics Dashboard** built with **Power BI** to analyze a Brazilian e-commerce dataset.  
-This dashboard provides actionable insights into sales performance, customer behavior, delivery efficiency, reviews & satisfaction, seller performance, and product analytics.
+This project is an **end-to-end data analytics case study** on the Brazilian Olist e-commerce dataset, designed to transform raw transactional data into **actionable business insights** across sales, customers, delivery performance, reviews, sellers, and products.
+
+The goal is to simulate a real-world business intelligence scenario using SQL and Power BI.
 
 ---
 
 ## 🚀 Project Overview
 
-This project takes raw transactional data from a Brazilian e-commerce dataset and transforms it into meaningful business insights using:
+This project analyzes e-commerce operations using:
 
-- **SQL** for data cleaning, transformation, and modeling  
-- **Power BI** for interactive dashboards and visual analytics  
+- **SQL** → data cleaning, transformation, and modeling  
+- **Power BI** → interactive dashboards and visual storytelling  
+- **Star Schema Data Model** → optimized for analytical performance  
 
-The data model follows a **Star Schema** design to support efficient analysis.
+It focuses on answering key business questions related to performance, efficiency, and customer behavior.
 
 ---
 
-## 📦 Dataset Summary
+## 📦 Dataset Structure
 
-The dataset contains multiple tables:
+The dataset includes multiple interconnected tables:
 
 | Table Name | Description |
 |------------|-------------|
 | Orders | Order-level metadata |
-| Order Items | Item-level details per order |
-| Order Payments | Payment method and value |
-| Order Reviews | Ratings and customer feedback |
-| Customers | Customer demographic data |
-| Sellers | Seller demographic data |
-| Products | Product information |
-| Date Table | Created manually for time-based analysis |
+| Order Items | Item-level transaction details |
+| Order Payments | Payment method and values |
+| Order Reviews | Customer feedback and ratings |
+| Customers | Customer demographic information |
+| Sellers | Seller data |
+| Products | Product catalog |
+| Date Table | Custom time dimension for analysis |
 
 <img width="1277" height="732" alt="image" src="https://github.com/user-attachments/assets/5b03a67e-0bd4-4be2-8d4f-cfa870c078e9" />
 
 ---
 
 ## 📊 Dashboard Pages / Analytical Views
+The analysis is divided into six core business areas:
 
-### 1️⃣ Overview Page
-**Key Metrics:**
+---
+
+# 1️⃣ Executive Overview
+
+### Key KPIs
 - Total Orders  
 - Total Revenue  
 - Total Customers  
 - Average Order Value  
 - Average Delivery Time  
 
-**Business Questions Answered:**
-- What is the overall business performance?
-- What is the average customer spending and delivery efficiency?
-- How does revenue change over time?
-- Which product categories generate the most revenue?
-- What is the distribution of order statuses?
-- How do customers rate their orders?
-- Where are the customers located?
+### Key Insights
+- Total revenue reached **16.01M**, with **99K orders** and **99K customers**.
+- Revenue grew significantly:
+  - 2016 → 2017: **+12,112.70%**
+  - 2017 → 2018: **+20%**
+- The top-performing category was **Healthy Beauty (9% of revenue)**.
+- Most customers are concentrated in **Sao Paulo city (17.15%)**.
+- Average delivery time is **11 days**, indicating moderate logistics performance.
+- Customer satisfaction is generally high, with most ratings at **5 stars**.
 
-**Insights:**
-- Total revenue reached 16.01 M, with 99K total orders and 99K customers.
-- Revenue increased from 2016 to 2017 by 12,112,70%, and from 2017 to 2018 by 20%.
-- The best-selling category was Healthy Beauty, contributing 9% of total revenue.
-- The highest number of customers came from Sao Paulo city, representing 17.15% of all customers.
-- The average delivery time is 11 days, indicating a generally average logistics performance.
-- Most reviews are concentrated around 5 stars, reflecting positive customer satisfaction.
+### Business Recommendations
+- Prioritize high-performing product categories for marketing investment.
+- Optimize logistics during peak demand periods.
+- Improve delivery performance in lower-performing regions.
+- Monitor SLA compliance using delivery KPIs.
+- Use this page as a **monthly executive dashboard snapshot**.
 
-**Recommendations:**
-- Focus marketing efforts on the top-performing categories, as they contribute the highest share of total revenue.
-- Allocate delivery resources more efficiently in months with higher order volumes.
-- Improve customer experience in regions with lower contribution to total sales by optimizing shipping and support.
-- Track average delivery time closely to ensure it aligns with business SLA targets.
-- Maintain this page as the executive snapshot for quick monthly monitoring.
+---
   
 <img width="1312" height="722" alt="image" src="https://github.com/user-attachments/assets/e927bcb0-0c60-4dfa-af10-e7247e4d5ca8" />
 
@@ -80,27 +81,22 @@ The dataset contains multiple tables:
 - Top categories  
 - Revenue by payment methods
   
-**Business Questions Answered:**
-- What is the overall sales performance?
-- How much does an average customer spend per order?
-- Is revenue increasing or decreasing over time?
-- Which categories generate the highest revenue?
-- Which payment methods are customers using the most?
-- Which regions contribute the most to sales?
-  
-**Insights:**
-- Total Revenue increased from 2016 to 2017 by 12,112,70%, and from 2017 to 2018 by 20%.
-- The top revenue-generating category was Healthy Beauty, contributing 9% of total revenue.
-- Payment behavior shows 78.34% of customers preferred credit card.
-- The region with the highest revenue was  Sao Paulo city generating 15.1% of total sales.
-- Average order value is $161, indicating customers typically spend moderate amounts per order.
+### Key Insights
+- Revenue grew sharply between 2016–2018:
+  - +12,112.70% then +20%
+- **Healthy Beauty** is the top category (9% revenue share).
+- **Credit cards dominate payments (78.34%)**.
+- Sao Paulo contributes **15.1% of total sales**.
+- Average order value: **$161**
 
-**Recommendations:**
-- Invest more in payment methods that produce the highest revenue share (e.g., if credit card contributes the most).
-- Extend promotions to categories with stable year-over-year growth.
-- Monitor categories with declining sales and run targeted marketing campaigns to revive demand.
-- Optimize logistics for states generating high revenue but facing delivery delays.
-- Consider bundling slow-moving products with high-performing categories.
+### Business Recommendations
+- Focus on high-performing payment methods and categories.
+- Expand successful product categories with consistent growth.
+- Investigate declining categories and apply targeted campaigns.
+- Optimize logistics in high-revenue regions.
+- Bundle products to increase order value.
+
+---
 
 <img width="1320" height="720" alt="image" src="https://github.com/user-attachments/assets/901810a6-416e-4bfe-a8f8-5efcea7ed152" />
 
@@ -112,31 +108,23 @@ The dataset contains multiple tables:
 - Revenue by customer segment  
 - New vs returning customers  
 
-**Questions Answered:**
-- How many customers does the business have?
-- How much revenue do customers generate?
-- How does the customer base grow over time?
-- Are customers returning or mostly new?
-- Which regions have the highest number of customers?
-- Which customers are the most valuable?
-- What are the customer segments based on spending levels?
+### Key Insights
+- Customer base grew **16.3% (2016–2018)**.
+- Strong acquisition growth:
+  - 2017: 43,635 new customers  
+  - 2018: 52,061 new customers + 687 returning
+- Sao Paulo dominates customer base (15.1% revenue contribution).
+- Customer segmentation:
+  - High-value: 20.01%
+  - Medium-value: 39.99%
+  - Low-value: 40%
 
-**Insights:**
-- The customer base grew by 16.3% from 2016 to 2018.
-- New customers from 2016 to 2017 represented 43635 customers and returning was 5 customers, while from 2017 to 2018 new customers raised to 52061 customers and returning customers raised to 687 customers.
-- Most customers are located in Sao Paulo city, contributing 15.1% of total revenue.
-- Top customer with id 0a0a92112bd4c708ca5fde585afaa872 contributed 0.8% of seller revenue.
-- Customer segmentation shows:
-  - High-value customers: 20.01%
-  - Medium-value customers:39.99%
-  - Low-value customers: 40%
-  
-**Recommendations:**
-- Increase loyalty programs for high-value customers (top revenue contributors).
-- Improve onboarding and targeted ads for new customers to increase their first-purchase conversion rate.
-- Build retention strategies for returning customers, as they generate more consistent revenue.
-- Personalize marketing by region to boost engagement in underperforming states.
-- Target low-value customer segments with discounts to increase activity.
+### Business Recommendations
+- Strengthen loyalty programs for high-value customers.
+- Improve onboarding conversion for new customers.
+- Build retention strategies for returning users.
+- Use regional targeting for marketing campaigns.
+- Incentivize low-value customers to increase spending.
 
 <img width="1313" height="722" alt="image" src="https://github.com/user-attachments/assets/de81c4db-1d36-4324-8e68-e4e4ebd39ca1" />
 
@@ -149,32 +137,22 @@ The dataset contains multiple tables:
 - Average and maximum delivery time  
 - Delivery outlier trends
   
-**Questions Answered:**
-- How many orders were placed?
-- How many orders were successfully delivered vs canceled?
-- How efficient is the delivery process?
-- How long do deliveries take on average?
-- What is the worst-case delivery delay?
-- How do order statuses trend over time?
-- How does delivery status relate to order status?
-- Are there abnormal delivery delays?
-- What is the overall delivery performance?
-- What are the exact details of all orders?
+### Key Insights
+- Total orders: **99K**
+- Delivered orders: **97.03%**
+- On-time delivery rate: **95.92%**
+- Late deliveries: **4.08%**
+- Average delivery time: **11 days**
+- Maximum delay: **188 days**
+- Delivery outliers: **5.46%**
+- Canceled orders: **1.24%**
 
-**Insights:**
-- Out of 99K orders, 97.03% were successfully delivered.
-- On-time delivery rate is 95.92%, showing strong delivery performance.
-- Late deliveries represent 4.08%, while early deliveries represent 95.92%.
-- Maximum delivery delay reached 188 days, while average delivery time is 11 days.
-- Delivery outliers account for 5.46% of delivered orders.
-- Canceled orders represent 1.24%.
-
-**Recommendations:**
-- Reduce delivery delays by working with carriers or optimizing routes in regions with high late-delivery rates.
-- Monitor outlier orders (> upper limit days) to detect operational issues or supplier delays.
-- Increase communication with customers when estimated vs. actual delivery time shows a high gap.
-- Improve warehouse processing to increase the on-time delivery rate.
-- Create SLA standards based on historical performance .
+### Business Recommendations
+- Reduce late deliveries through logistics optimization.
+- Investigate extreme delay outliers.
+- Improve warehouse processing time.
+- Enhance customer communication during delays.
+- Define SLA benchmarks based on historical performance.
 
 <img width="1336" height="677" alt="image" src="https://github.com/user-attachments/assets/e6892982-6d9f-4122-8c88-72f373ff8d42" />
 
@@ -187,31 +165,24 @@ The dataset contains multiple tables:
 - Net Promoter Score (NPS)  
 - Review distribution  
 
-**Questions Answered:**
-- How many reviews were submitted?
-- What is the sentiment distribution?
-- What is the average customer rating?
-- Which orders get the highest or lowest ratings?
-- How does customer satisfaction change over time?
-- How do delivered orders contribute to ratings?
-- What is the NPS score? (Customer loyalty)
-- What are the exact details of each review?
+### Key Insights
+- Total reviews: **99K**
+- Sentiment distribution:
+  - Positive: 77.07%
+  - Neutral: 8.24%
+  - Negative: 14.69%
+- Average rating: **4.52 / 5**
+- NPS score: **43.09**
+- On-time delivery rating: **4.3**
+- Late delivery rating: **2.6**
+- Review volume increased by **16.5%**
 
-**Insights:**
-- Total reviews: 99K, with:
- - Positive: 77.07%
- - Neutral: 8.24%
- - Negative:14.69%
-- Average rating is 4.52 / 5, reflecting excellent satisfaction.
-- NPS score is 43.09, which indicates Promoter customer behavior.
-- On-time deliveries received an average rating of 4.3, while late deliveries received only 2.6, showing the impact of delivery delays on satisfaction.
-- Review volume increased by 16.5% from 2016 to 2018.
-  
-**Recommendations:**
-- Encourage satisfied customers (4–5 stars) to leave more reviews to boost overall rating.
-- Address common customer complaints seen in 1–2-star reviews to improve product quality and delivery experience.
-- Reduce detractors by improving packaging, delivery time, and product accuracy.
-- Track rating trends monthly to quickly detect product or fulfillment issues.
+### Business Recommendations
+- Increase review engagement from satisfied customers.
+- Address root causes of negative feedback.
+- Improve delivery and packaging quality.
+- Monitor rating trends regularly.
+- Reduce detractors through service improvements.
 
 <img width="1230" height="718" alt="image" src="https://github.com/user-attachments/assets/a7323eec-a99c-44d2-92c4-fab2fa1cee0d" />
 
@@ -222,30 +193,23 @@ The dataset contains multiple tables:
 **Metrics:**
 - Total sellers  
 - Seller revenue  
-- Units sold by seller & category  
+- Units sold by seller & category
+  
+### Key Insights
+- Total sellers: **3K**
+- Total revenue: **13.59M**
+- Top seller contribution: **1.85%**
+- Freight cost increased by **16.9%**
+- Sao Paulo sellers dominate with **19.89% sales share**
+- Average freight cost: **$19.99**
 
-**Questions Answered:**
-- How many active sellers does the marketplace have?
-- Which sellers generate the most revenue?
-- How much do sellers pay for freight costs?
-- How many units does each seller sell?
-- How does seller performance change over time?
-- Which seller performs best in each product category?
-- What are the detailed metrics for each seller?
+### Business Recommendations
+- Support high-performing sellers with better inventory flow.
+- Adjust pricing strategies for low-margin high-demand items.
+- Promote profitable product categories.
+- Optimize freight cost efficiency.
+- Improve logistics for high-cost shipping categories.
 
-**Insights:**
-- There are 3K sellers, generating a total revenue of 13.59 M.
-- Top seller with ID 4869f7a5dfa277a7dca6462dcf3b52b2 contributed 1.85% of seller revenue.
-- Freight cost increased by 16.9 % over the period.
-- Sellers in the Sao Paulo City perform best, with 19.89% of total sales.
-- Average freight cost per seller is $ 19.99, indicating efficient shipping behavior.
-
-**Recommendations:**
-- Increase stock availability for high-revenue and high-unit-sold products.
-- Review pricing strategies for categories with low average price but high demand—possible opportunity to adjust margins.
-- Prioritize marketing for profitable product categories with high revenue contribution.
-- Analyze expensive products with low sales—reduce price or run promotions.
-- Reduce freight cost on categories with unusually high shipping charges.
 
 <img width="1378" height="686" alt="image" src="https://github.com/user-attachments/assets/70894f17-6143-440e-a25f-c01824517e67" />
 
@@ -258,34 +222,24 @@ The dataset contains multiple tables:
 - Revenue by category  
 - Product performance
 
-**Insights:**
-- There are 33K products across 74 categories, generating 13.59 M total revenue.
-- Top product with ID bb50f2e236e5eea0100680137654686c of health_beauty category, representing 1.19 % of total product revenue.
-- The highest-selling category was bed bath table, with 13665 units sold.
-- Price distribution shows:
- - Min: $ 0.85
- - Max: $ 6735
- - Median: $ 75
- - Average: $12.65
-- Freight cost is highest in Baby category with $409.68, which may indicate higher shipping complexity.
-- Most products fall within the price range 0 to $50.
+### Key Insights
+- Total products: **33K across 74 categories**
+- Total revenue: **13.59M**
+- Top category: **bed bath table (13,665 units)**
+- Price range:
+  - Min: $0.85
+  - Max: $6735
+  - Median: $75
+  - Average: $12.65
+- Freight cost highest in Baby category ($409.68)
 
-**Questions Answered:**
-- How many products and categories exist?
-- How many units were sold in total?
-- What is the average product price?
-- Which products generate the most revenue?
-- Which categories generate the most revenue?
-- How are product prices distributed?
-- What is the average price per category?
-- How much freight cost does each category generate?
-- What are the detailed product-level metrics? 
-
-**Recommendations:**
-- Maintain sufficient stock of top-selling products.  
-- Review low-selling products for discounting or removal.  
-- Monitor pricing trends to remain competitive.
-
+### Business Recommendations
+- Maintain inventory of top-selling products.
+- Optimize pricing for low-performing products.
+- Monitor freight-heavy categories for cost reduction.
+- Focus marketing on high-performing categories.
+- Remove or discount underperforming products.
+  
 <img width="1374" height="574" alt="image" src="https://github.com/user-attachments/assets/d80cf8b7-c649-420f-8a5c-468ce04e1470" />
 
 
@@ -299,6 +253,7 @@ The dataset contains multiple tables:
 | Power BI | Dashboard visualization |
 | Power Query | Data modeling & ETL |
 | DAX | Custom analytics calculations |
+| Star Schema | Data modeling |
 
 ---
 
@@ -319,13 +274,4 @@ The dataset is based on the **Olist Brazilian E‑commerce dataset**, publicly a
 
 ---
 
-## 📄 License
 
-This project is shared under the **MIT License** (add LICENSE file).
-
----
-
-## ⭐ Contributions
-
-Contributions are welcome!  
-Feel free to open issues or submit pull requests.
