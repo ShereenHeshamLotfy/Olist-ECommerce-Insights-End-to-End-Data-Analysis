@@ -78,7 +78,9 @@ The dashboard is structured into key business areas:
 - Majority are new customers with low returning rate  
 - Customer segmentation shows **20% high-value customers**
 
-<img width="1311" height="728" alt="image" src="https://github.com/user-attachments/assets/9671f57d-9616-4d6e-923e-1fdabd05902b" />
+<img width="1313" height="724" alt="image" src="https://github.com/user-attachments/assets/3f286561-c79b-43f6-ad62-849548f1e486" />
+
+
 
 
 ---
