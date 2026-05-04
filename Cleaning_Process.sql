@@ -886,6 +886,16 @@ JOIN Products_Cleaned pc ON oi.product_id=pc.product_id
 GROUP BY oi.product_id,pc.product_category_name
 ORDER BY COUNT(oi.product_id) DESC;
 
+-- Add customer_id column in order_items table to achive star scheme
+ALTER TABLE Order_items_Cleaned
+ADD customer_id NVARCHAR(50);
+
+-- Get customer_id from orders table and make join with order_items to put it their
+UPDATE Order_items_Cleaned
+SET customer_id = o.customer_id
+FROM Order_items_Cleaned oi
+JOIN Orders_Cleaned o ON oi.order_id = o.order_id;
+
 ---------------------------------------------------------
 -- STEP 8: FINAL VALIDATION
 ---------------------------------------------------------
