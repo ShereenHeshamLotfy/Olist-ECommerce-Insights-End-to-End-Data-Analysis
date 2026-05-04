@@ -8,16 +8,22 @@ USE Olist_Project;
 SELECT TOP 10 *
 FROM olist_orders_dataset;
 
---Create table to copy data in to it to start cleaning data without affecting raw data
+---------------------------------------------------------
+-- Create a clean copy of the table to avoid modifying raw data
+---------------------------------------------------------
 SELECT TOP 0* INTO Orders_Cleaned
 FROM olist_orders_dataset;
 
---Copy data to that table
+-- Insert data into cleaned table
 INSERT INTO Orders_Cleaned(order_id,customer_id,order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date)
 SELECT order_id,customer_id,order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date
 FROM olist_orders_dataset;
 
 SELECT * FROM Orders_Cleaned;
+
+---------------------------------------------------------
+-- DATA QUALITY CHECKS
+---------------------------------------------------------
 
 --Check if there are any dublications in this table
 --There are no dublications 
@@ -59,7 +65,7 @@ FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_NAME = 'Orders_Cleaned';
 
 --Check if there are nulls in customer_id column
--- There are no nulls in customer_id column
+-- customer_id should never be NULL
 SELECT customer_id
 FROM Orders_Cleaned
 WHERE customer_id is null;
@@ -80,6 +86,11 @@ SELECT order_status
 FROM Orders_Cleaned
 WHERE order_status is null;
 
+---------------------------------------------------------
+-- BUSINESS LOGIC VALIDATION
+---------------------------------------------------------
+
+-- Check orders with problematic statuses
 SELECT order_status,order_purchase_timestamp,order_approved_at,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date
 FROM Orders_Cleaned
 WHERE order_status ='unavailable' or order_status ='canceled' ;
@@ -100,15 +111,20 @@ SELECT distinct order_status, order_approved_at
 FROM Orders_Cleaned
 WHERE order_approved_at is null;
 
--- There are 14 orders delivered with no approved date 
+-- Business Insight:
+--  there are 14 orders marked as 'delivered' but have NULL approved date.
+-- This is logically inconsistent, as an order must be approved before delivery.
 SELECT order_status, order_approved_at,order_purchase_timestamp
 FROM Orders_Cleaned
 WHERE order_approved_at is null AND order_status='delivered';
 
---Make column to flag delivered orders with no approved date as i will exclude them in some cases 
+---------------------------------------------------------
+-- Add flag column to track imputed values
+---------------------------------------------------------
 ALTER TABLE Orders_Cleaned
 ADD approved_date_source NVARCHAR(50);
 
+-- Flag records where approved date is missing but order is delivered
 UPDATE Orders_Cleaned
 SET approved_date_source=
     CASE 
@@ -121,7 +137,13 @@ SELECT order_status, order_approved_at,order_purchase_timestamp,approved_date_so
 FROM Orders_Cleaned
 WHERE order_approved_at is null AND order_status='delivered';
 
---Replace null approved date with purchase timestamp
+---------------------------------------------------------
+-- Impute missing approved date
+---------------------------------------------------------
+
+-- Business Decision:
+-- Replace missing approved date with purchase timestamp
+-- to maintain timeline consistency
 UPDATE Orders_Cleaned
 SET order_approved_at=
     CASE 
@@ -130,14 +152,18 @@ SET order_approved_at=
         ELSE order_approved_at
     END
 
+    ---------------------------------------------------------
+-- VALIDATION AFTER FIX
+---------------------------------------------------------
 --Check cleaning is done right or not
 SELECT order_status, order_approved_at,order_purchase_timestamp,approved_date_source
 FROM Orders_Cleaned
 WHERE order_approved_at IS NULL AND order_status='delivered';
 
-SELECT order_status, order_approved_at,order_purchase_timestamp,approved_date_source
+-- Check distribution of imputed vs original data
+SELECT approved_date_source, COUNT(*) 
 FROM Orders_Cleaned
-WHERE approved_date_source='purchase_date';
+GROUP BY approved_date_source;
 
 --Check if there are nulls in order_delivered_carrier_date column
 -- There are 1,783 orders with order_delivered_carrier_date is null some of them canceled,created ,delivered,processing,invoiced,unavaliable or approved
@@ -163,6 +189,15 @@ SELECT order_status,order_purchase_timestamp,order_approved_at,order_delivered_c
 FROM Orders_Cleaned
 WHERE order_delivered_carrier_date is null AND order_status='delivered';
 
+--Replace order_delivered_carrier date which has order delivered customer date with approved date
+UPDATE Orders_Cleaned
+SET order_delivered_carrier_date=
+    CASE 
+        WHEN order_delivered_carrier_date IS NULL AND order_status='delivered' AND order_delivered_customer_date IS NOT NULL
+        THEN order_approved_at
+        ELSE order_delivered_carrier_date
+    END
+
 --Check if there are nulls in order_delivered_customer_date column
 -- There are 2,965 orders with order_delivered_customer_date is null some of them canceled,created ,delivered,processing,invoiced,unavaliable ,approved or shipped
 SELECT order_status,order_delivered_carrier_date,order_delivered_customer_date,order_estimated_delivery_date
@@ -178,12 +213,37 @@ SELECT order_status, order_delivered_customer_date,order_estimated_delivery_date
 FROM Orders_Cleaned
 WHERE order_delivered_customer_date is null AND order_status='delivered';
 
+---------------------------------------------------------
+-- Add flag column to track imputed values
+---------------------------------------------------------
+ALTER TABLE Orders_Cleaned
+ADD delivered_date_source NVARCHAR(50);
+
+-- Flag records where delivery date is missing but order is delivered
+UPDATE Orders_Cleaned
+SET delivered_date_source=
+    CASE 
+        WHEN order_delivered_customer_date is null AND order_status='delivered'
+        THEN 'imputed_from_estimated_delivery _date'
+        ELSE 'original'
+    END
+
+--Replace missing delviery customer date with estimated delivery
+UPDATE Orders_Cleaned
+SET order_delivered_customer_date=
+    CASE 
+        WHEN order_delivered_customer_date IS NULL AND order_status='delivered' 
+        THEN order_estimated_delivery_date
+        ELSE order_delivered_customer_date
+    END
+
 ----Check if there are nulls in order_estimated_delivery_date column
 -- There are no nulls in order_estimated_delivery_date column
 SELECT order_estimated_delivery_date
 FROM Orders_Cleaned
 WHERE order_estimated_delivery_date is null;
 
+-- Final preview
 SELECT *
 FROM Orders_Cleaned;
 
@@ -203,13 +263,19 @@ INSERT INTO Payments_Cleaned(order_id,payment_sequential,payment_type,payment_in
 SELECT order_id,payment_sequential,payment_type,payment_installments,payment_value
 FROM olist_order_payments_dataset;
 
--- Check if there are any dublications in table
--- There are no dublications
+---------------------------------------------------------
+-- DATA QUALITY CHECKS
+---------------------------------------------------------
+-- 1. Check for duplicates (composite level)
+-- Expectation: No duplicates
 SELECT order_id,payment_sequential,payment_type,payment_installments,payment_value,COUNT(*) AS occurrence
 FROM Payments_Cleaned
 GROUP BY order_id,payment_sequential,payment_type,payment_installments,payment_value
 HAVING COUNT(*) > 1;
 
+---------------------------------------------------------
+-- NULL CHECKS
+---------------------------------------------------------
 --Check if there are nulls in order_id
 -- There are no nulls in order_id
 SElECT order_id
@@ -222,29 +288,11 @@ SElECT order_id,payment_sequential
 FROM Payments_Cleaned
 WHERE payment_sequential IS NULL;
 
-SELECT DISTINCT payment_sequential
-FROM Payments_Cleaned;
-
-SELECT MIN(payment_sequential),MAX(payment_sequential)
-FROM Payments_Cleaned;
-
 --Check if there are nulls in payment_type
 -- There are no nulls in payment_type
 SElECT order_id,payment_type
 FROM Payments_Cleaned
 WHERE payment_type IS NULL;
-
-SELECT DISTINCT payment_type
-FROM olist_order_payments_dataset;
-
---There are 3 orders with undefined payment method with 0 payment_value that means canceled orders so i will drop them 
-SElECT order_id,payment_type,payment_value
-FROM Payments_Cleaned
-WHERE payment_type ='not_defined';
-
---Delete this rows
-DELETE FROM Payments_Cleaned
-WHERE payment_type ='not_defined';
 
 --Check if there are nulls in payment_installments
 -- There are no nulls in payment_installments
@@ -252,21 +300,54 @@ SElECT order_id,payment_installments
 FROM Payments_Cleaned
 WHERE payment_installments IS NULL;
 
-SELECT DISTINCT payment_installments
+-- payment_value should not be NULL
+SELECT *
+FROM Payments_Cleaned
+WHERE payment_value IS NULL;
+
+---------------------------------------------------------
+-- VALUE DISTRIBUTION CHECKS
+---------------------------------------------------------
+
+-- Check range of installments
+SELECT MIN(payment_installments), MAX(payment_installments)
 FROM Payments_Cleaned;
 
-SELECT MIN(payment_installments),MAX(payment_installments)
+-- Check range of payment values
+SELECT MIN(payment_value), MAX(payment_value)
 FROM Payments_Cleaned;
+
+---------------------------------------------------------
+-- HANDLE INVALID PAYMENT TYPES
+---------------------------------------------------------
+-- Investigate undefined payment types
+--There are 3 orders with undefined payment method with 0 payment_value that means canceled orders so i will drop them 
+SElECT order_id,payment_type,payment_value
+FROM Payments_Cleaned
+WHERE payment_type ='not_defined';
+-- Business Insight:
+-- These records have payment_value = 0 and likely represent canceled or failed transactions
+
+---------------------------------------------------------
+-- Delete invalid records
+---------------------------------------------------------
+
+-- Business Decision:
+-- Remove 'not_defined' records as they do not represent real transactions
+DELETE FROM Payments_Cleaned
+WHERE payment_type ='not_defined';
+
 
 --Check if there are nulls in payment_value
--- There are no nulls in payment_value and zero values their payment type are voucher and it is logical
 SElECT order_id,payment_value,payment_type
 FROM Payments_Cleaned
-WHERE payment_value IS NULL OR payment_value<=0;
+WHERE payment_value<=0;
+-- Business Insight:
+-- Zero values exist and are associated with 'voucher' payment type
+-- This is valid (discounts / promotions), so no action needed
+-- there are no neagtive values
 
-SELECT MIN(payment_value),MAX(payment_value)
-FROM Payments_Cleaned;
-
+-- Final preview
 SELECT * FROM Payments_Cleaned;
 
 ---------------------------------------------------------
@@ -275,6 +356,9 @@ SELECT * FROM Payments_Cleaned;
 
 SELECT * FROM olist_products_dataset;
 
+---------------------------------------------------------
+-- STEP 1: CREATE CLEANED TABLE
+---------------------------------------------------------
 --Create table to get a copy of data to start cleaning
 SELECT TOP 0* INTO Products_Cleaned
 FROM olist_products_dataset;
@@ -288,6 +372,10 @@ FROM olist_products_dataset;
 
 SELECT * FROM Products_Cleaned;
 
+---------------------------------------------------------
+-- STEP 2: DATA QUALITY CHECKS
+---------------------------------------------------------
+
 -- Check if there are any dublications in table
 -- There are no dublications
 SELECT product_id,product_category_name,product_name_lenght,product_description_lenght,product_photos_qty,product_weight_g,product_length_cm,product_height_cm,product_width_cm,COUNT(*) AS occurrence
@@ -295,9 +383,17 @@ FROM Products_Cleaned
 GROUP BY product_id,product_category_name,product_name_lenght,product_description_lenght,product_photos_qty,product_weight_g,product_length_cm,product_height_cm,product_width_cm
 HAVING COUNT(*) > 1;
 
+---------------------------------------------------------
+-- STEP 3: DROP IRRELEVANT COLUMNS
+---------------------------------------------------------
+
 --​Drop column like product_name_length and product_description_lenght as they are not necessary in analysis
 ALTER TABLE Products_Cleaned
 DROP COLUMN product_name_lenght ,product_description_lenght;
+
+---------------------------------------------------------
+-- STEP 4: HANDLE MISSING CATEGORY NAMES
+--------------------------------------------------------
 
 --CHECK IF THERE ARE NULLS OR DUPLICATION IN PRODUCT_ID COULMN
 -- THERE ARE NO DUBLICATIONS OR NULLS IN product_id column
@@ -316,13 +412,22 @@ SELECT product_id,product_category_name
 FROM Products_Cleaned
 WHERE product_category_name IS NULL;
 
-SELECT DISTINCT product_category_name
-FROM Products_Cleaned;
+-- Add a column to track data source (original vs imputed)
+ALTER TABLE Products_Cleaned
+ADD category_source NVARCHAR(20);
 
---REPLACE NULL VALUES WITH OTHER
+-- Replace NULL categories while preserving traceability
 UPDATE Products_Cleaned
-SET product_category_name='Other'
-WHERE product_category_name IS NULL;
+SET 
+    category_source = CASE 
+        WHEN product_category_name IS NULL THEN 'imputed'
+        ELSE 'original'
+    END,
+    product_category_name = ISNULL(product_category_name, 'Other');
+    
+---------------------------------------------------------
+-- STEP 5: HANDLE MISSING PRODUCT PHOTOS
+---------------------------------------------------------
 
 --CHECK IF THERE ARE NULLS IN product_photos_qty COULMN
 -- THERE ARE 610 OF PRODUCTS WITH QUNATITY OF PHOTOS OF PRODUCT
@@ -330,16 +435,14 @@ SELECT product_id,product_photos_qty
 FROM Products_Cleaned
 WHERE product_photos_qty IS NULL;
 
-SELECT DISTINCT product_photos_qty
-FROM Products_Cleaned;
-
---REPLACE NULL VALUES WITH 0
+-- Replace NULL with 0 (logical assumption: no photos available)
 UPDATE Products_Cleaned
 SET product_photos_qty=0
 WHERE product_photos_qty IS NULL;
 
-SELECT MIN(product_photos_qty),MAX(product_photos_qty)
-FROM Products_Cleaned;
+---------------------------------------------------------
+-- STEP 6: HANDLE PRODUCT WEIGHT
+---------------------------------------------------------
 
 --CHECK IF THERE ARE NULLS IN product_weight_g COULMN
 -- THERE ARE 2 OF PRODUCTS WITH NULL WEIGHT
@@ -376,8 +479,9 @@ UPDATE Products_Cleaned
 SET product_weight_g=@GlobalAvgWeight
 WHERE product_weight_g=0;
 
-SELECT MIN(product_weight_g),MAX(product_weight_g)
-FROM Products_Cleaned;
+---------------------------------------------------------
+-- STEP 7: HANDLE PRODUCT DIMENSIONS
+---------------------------------------------------------
 
 --CHECK IF THERE ARE NULLS IN product_length_cm COULMN
 -- THERE ARE 2 OF PRODUCTS WITH NULL HEIGHT
@@ -403,9 +507,6 @@ SELECT product_category_name,product_length_cm
 FROM Products_Cleaned
 WHERE product_length_cm <=0;
 
-SELECT MIN(product_length_cm),MAX(product_length_cm)
-FROM Products_Cleaned;
-
 --CHECK IF THERE ARE NULLS IN product_height_cm COULMN
 -- THERE ARE 2 OF PRODUCTS WITH NULL HEIGHT
 SELECT product_category_name,product_height_cm
@@ -429,9 +530,6 @@ WHERE pc.product_height_cm IS NULL;
 SELECT product_category_name,product_height_cm
 FROM Products_Cleaned
 WHERE product_height_cm <=0;
-
-SELECT MIN(product_height_cm),MAX(product_height_cm)
-FROM Products_Cleaned;
 
 --CHECK IF THERE ARE NULLS IN product_width_cm COULMN
 -- THERE ARE 2 OF PRODUCTS WITH NULL WIDTH
@@ -457,8 +555,17 @@ SELECT product_category_name,product_width_cm
 FROM Products_Cleaned
 WHERE product_width_cm <=0;
 
-SELECT MIN(product_width_cm),MAX(product_width_cm)
-FROM Products_Cleaned;
+---------------------------------------------------------
+-- STEP 8: DATA VALIDATION (CRITICAL)
+---------------------------------------------------------
+
+-- Detect unrealistic values (sanity check)
+SELECT *
+FROM Products_Cleaned
+WHERE product_weight_g > 50000
+   OR product_length_cm > 200
+   OR product_height_cm > 200
+   OR product_width_cm > 200;
 
 SELECT * FROM Products_Cleaned;
 
@@ -481,6 +588,10 @@ JOIN product_category_name_translation pt ON pc.product_category_name=pt.product
 ---------------------------------------------------------
 SELECT * FROM olist_customers_dataset;
 
+---------------------------------------------------------
+-- STEP 1: CREATE CLEANED TABLE
+---------------------------------------------------------
+
 --Create table to copy data in to it to start cleaning data without affecting raw data
 SELECT TOP 0* INTO Customers_Cleaned
 FROM olist_customers_dataset;
@@ -491,6 +602,10 @@ SELECT customer_id,customer_unique_id,customer_zip_code_prefix,customer_city,cus
 FROM olist_customers_dataset;
 
 SELECT * FROM Customers_Cleaned;
+
+---------------------------------------------------------
+-- STEP 2: DATA QUALITY CHECKS
+---------------------------------------------------------
 
 -- Check if there are any dublications in table
 -- There are no dublications
@@ -510,10 +625,17 @@ FROM Customers_Cleaned
 GROUP BY customer_id
 HAVING COUNT(*) >1;
 
+---------------------------------------------------------
+-- STEP 3: CUSTOMER LOGIC VALIDATION
+---------------------------------------------------------
+
 --Check nulls and duplications in customer_unique_id
 -- There are no nulls in customer_unique_id 
 --There are duplications in it as it means customer make more than one order and it is good thing and as customer_unique_id related to customer
---But customer_id related to orders s and it creates with every new order
+--But customer_id related to orders and it creates with every new order
+-- so Insight:
+-- customer_id = order-level identifier
+-- customer_unique_id = real customer identifier (can appear multiple times)
 SELECT customer_unique_id
 FROM Customers_Cleaned
 WHERE customer_unique_id IS NULL;
@@ -523,14 +645,24 @@ FROM Customers_Cleaned
 GROUP BY customer_unique_id
 HAVING COUNT(*) >1;
 
+---------------------------------------------------------
+-- STEP 4: HANDLE ZIP CODE DATA
+---------------------------------------------------------
+
 --Check nulls in customer_zip_code_prefix
 -- There are no nulls in customer_zip_code_prefix 
 SELECT customer_zip_code_prefix
 FROM Customers_Cleaned
 WHERE customer_unique_id IS NULL;
 
-SELECT DISTINCT customer_zip_code_prefix,customer_city,customer_state
-FROM Customers_Cleaned;
+-- Check for invalid zip codes (edge cases)
+SELECT *
+FROM Customers_Cleaned
+WHERE customer_zip_code_prefix <= 0;
+
+---------------------------------------------------------
+-- STEP 5: HANDLE CITY & STATE DATA
+---------------------------------------------------------
 
 --Check nulls in customer_city
 -- There are no nulls in customer_city
@@ -538,19 +670,59 @@ SELECT customer_city
 FROM Customers_Cleaned
 WHERE customer_city IS NULL;
 
+-- Standardize city names (lowercase for consistency)
+UPDATE Customers_Cleaned
+SET customer_city = LOWER(customer_city);
+
+-- Optional: trim spaces if needed
+UPDATE Customers_Cleaned
+SET customer_city = LTRIM(RTRIM(customer_city));
+
 --Check nulls in customer_state
 -- There are no nulls in customer_state
 SELECT customer_state
 FROM Customers_Cleaned
 WHERE customer_state IS NULL;
 
---Get sales of each city
-SELECT c.customer_city,COUNT(DISTINCT oc.order_id) AS total_orders,ROUND(SUM(pc.payment_value),2) AS total_sales
+---------------------------------------------------------
+-- STEP 6: DATA ENRICHMENT (OPTIONAL BUT STRONG)
+---------------------------------------------------------
+
+-- Create region grouping for business analysis
+ALTER TABLE Customers_Cleaned
+ADD region NVARCHAR(20);
+
+UPDATE Customers_Cleaned
+SET region =
+    CASE 
+        WHEN customer_state IN ('SP', 'RJ', 'MG', 'ES') THEN 'Southeast'
+        WHEN customer_state IN ('RS', 'SC', 'PR') THEN 'South'
+        WHEN customer_state IN ('BA', 'PE', 'CE') THEN 'Northeast'
+        ELSE 'Other'
+    END;
+
+---------------------------------------------------------
+-- STEP 7: BUSINESS ANALYSIS (CUSTOMER INSIGHTS)
+---------------------------------------------------------
+
+-- Calculate total orders and revenue per city
+SELECT 
+    c.customer_city,
+    COUNT(DISTINCT oc.order_id) AS total_orders,
+    ROUND(SUM(pc.payment_value), 2) AS total_sales
 FROM Customers_Cleaned c
-JOIN Orders_Cleaned oc ON c.customer_id=oc.customer_id
-JOIN Payments_Cleaned pc ON oc.order_id=pc.order_id
+JOIN Orders_Cleaned oc 
+    ON c.customer_id = oc.customer_id
+JOIN Payments_Cleaned pc 
+    ON oc.order_id = pc.order_id
 GROUP BY c.customer_city
-ORDER BY total_sales DESC
+ORDER BY total_sales DESC;
+
+---------------------------------------------------------
+-- STEP 8: FINAL VALIDATION
+---------------------------------------------------------
+
+SELECT * FROM Customers_Cleaned;
 
 ---------------------------------------------------------
 -- STEP 6: ORDER_ITEMS TABLE CLEANING
@@ -558,7 +730,8 @@ ORDER BY total_sales DESC
 SELECT * FROM olist_order_items_dataset;
 
 --Create table to copy data in to it to start cleaning data without affecting raw data
-SELECT TOP 0* INTO Order_items_Cleaned
+SELECT TOP 0* 
+INTO Order_items_Cleaned
 FROM olist_order_items_dataset;
 
 --Copy data to that table
@@ -567,6 +740,10 @@ SELECT order_id,order_item_id,product_id,seller_id,shipping_limit_date,price,fre
 FROM olist_order_items_dataset;
 
 SELECT * FROM Order_items_Cleaned;
+
+---------------------------------------------------------
+-- STEP 1: DATA QUALITY CHECKS
+---------------------------------------------------------
 
 -- Check if there are any dublications in table
 -- There are no dublications
@@ -599,15 +776,23 @@ SELECT seller_id
 FROM Order_items_Cleaned
 WHERE seller_id IS NULL;
 
+---------------------------------------------------------
+-- STEP 2: DATE VALIDATION
+---------------------------------------------------------
+
 --Check nulls in seller_id
 -- There are no nulls in seller_id
 SELECT shipping_limit_date
 FROM Order_items_Cleaned
 WHERE shipping_limit_date IS NULL;
 
-SELECT DISTINCT shipping_limit_date
-FROM Order_items_Cleaned;
+-- Business Insight:
+-- shipping_limit_date represents the deadline for seller shipment
+-- Missing values would impact logistics performance tracking
 
+---------------------------------------------------------
+-- STEP 3: PRICE VALIDATION
+---------------------------------------------------------
 --Check nulls in price column
 -- There are no nulls in price column
 SELECT price
@@ -620,8 +805,13 @@ SELECT price
 FROM Order_items_Cleaned
 WHERE price <=0;
 
+-- Check distribution
 SELECT MIN(price),MAX(price)
 FROM Order_items_Cleaned;
+
+---------------------------------------------------------
+-- STEP 4: FREIGHT (SHIPPING COST) VALIDATION
+---------------------------------------------------------
 
 --Check nulls in freight_value column
 -- There are no nulls in freight_value column
@@ -637,16 +827,58 @@ SELECT order_id,order_item_id,product_id,shipping_limit_date,freight_value
 FROM Order_items_Cleaned
 WHERE freight_value <=0;
 
-SELECT MIN(freight_value),MAX(freight_value)
-FROM Order_items_Cleaned;
+---------------------------------------------------------
+-- STEP 5: OUTLIER DETECTION (IMPORTANT)
+---------------------------------------------------------
 
---Get Best seller
+-- Detect unusually high prices or shipping costs
+SELECT *
+FROM Order_Items_Cleaned
+WHERE price > 5000
+   OR freight_value > 1000;
+-- Detect category of these products
+SELECT pc.product_category_name, oi.price
+FROM Order_Items_Cleaned oi
+JOIN Products_Cleaned pc 
+    ON oi.product_id = pc.product_id
+WHERE oi.price > 5000;
+
+--insights:
+-- there products are from housewares, art and computers
+
+-- flag high price products
+ALTER TABLE Order_Items_Cleaned
+ADD price_category NVARCHAR(20);
+
+UPDATE Order_Items_Cleaned
+SET price_category =
+    CASE 
+        WHEN price > 5000 THEN 'high_value'
+        ELSE 'normal'
+    END;
+
+---------------------------------------------------------
+-- STEP 6: FEATURE ENGINEERING
+---------------------------------------------------------
+
+-- Total item cost (product + shipping)
+ALTER TABLE Order_Items_Cleaned
+ADD total_item_value FLOAT;
+
+UPDATE Order_Items_Cleaned
+SET total_item_value = price + freight_value;
+
+---------------------------------------------------------
+-- STEP 7: BUSINESS ANALYSIS
+---------------------------------------------------------
+
+-- Top sellers by number of orders
 SELECT seller_id,COUNT(order_id) AS number_of_orders
 FROM Order_items_Cleaned
 GROUP BY seller_id
 ORDER BY COUNT(order_id) DESC;
 
---Get Best Product
+-- Top products by demand
 --Furniture_decor category is the best seller product category
 SELECT oi.product_id,pc.product_category_name,COUNT(order_id) AS number_of_orders
 FROM Order_items_Cleaned oi
@@ -655,7 +887,14 @@ GROUP BY oi.product_id,pc.product_category_name
 ORDER BY COUNT(oi.product_id) DESC;
 
 ---------------------------------------------------------
--- STEP 7: ORDER_ITEMS TABLE CLEANING
+-- STEP 8: FINAL VALIDATION
+---------------------------------------------------------
+
+SELECT *
+FROM Order_Items_Cleaned;
+
+---------------------------------------------------------
+-- STEP 7: SELLERS TABLE CLEANING
 ---------------------------------------------------------
 SELECT * FROM olist_sellers_dataset;
 
@@ -669,6 +908,10 @@ SELECT seller_id,seller_zip_code_prefix,seller_city,seller_state
 FROM olist_sellers_dataset;
 
 SELECT * FROM Sellers_Cleaned;
+
+---------------------------------------------------------
+-- STEP 1: DATA QUALITY CHECKS
+---------------------------------------------------------
 
 -- Check if there are any dublications in table
 -- There are no dublications
@@ -688,11 +931,19 @@ FROM Sellers_Cleaned
 GROUP BY seller_id
 HAVING COUNT(*)>1 ;
 
+---------------------------------------------------------
+-- STEP 2: LOCATION DATA VALIDATION
+---------------------------------------------------------
 --Check nulls in seller_zip_code_prefix column
 -- There are no nulls in seller_zip_code_prefix column 
 SELECT seller_zip_code_prefix
 FROM Sellers_Cleaned
 WHERE seller_zip_code_prefix IS NULL;
+
+-- Validate zip code values (sanity check)
+SELECT *
+FROM Sellers_Cleaned
+WHERE seller_zip_code_prefix <= 0;
 
 --Check nulls in seller_city column
 -- There are no nulls in seller_city column 
@@ -706,12 +957,63 @@ SELECT seller_state
 FROM Sellers_Cleaned
 WHERE seller_state IS NULL;
 
+---------------------------------------------------------
+-- STEP 3: DATA STANDARDIZATION
+---------------------------------------------------------
+
+-- Standardize city names (lowercase + trim)
+UPDATE Sellers_Cleaned
+SET seller_city = LOWER(LTRIM(RTRIM(seller_city)));
+
+---------------------------------------------------------
+-- STEP 4: DATA ENRICHMENT (OPTIONAL)
+---------------------------------------------------------
+
+-- Add region column for better business analysis
+ALTER TABLE Sellers_Cleaned
+ADD region NVARCHAR(20);
+
+UPDATE Sellers_Cleaned
+SET region =
+    CASE 
+        WHEN seller_state IN ('SP', 'RJ', 'MG', 'ES') THEN 'Southeast'
+        WHEN seller_state IN ('RS', 'SC', 'PR') THEN 'South'
+        WHEN seller_state IN ('BA', 'PE', 'CE') THEN 'Northeast'
+        ELSE 'Other'
+    END;
+
+    
+---------------------------------------------------------
+-- STEP 5: BUSINESS ANALYSIS
+---------------------------------------------------------
+
 --Get best 10 seller and his city and state
-SELECT TOP 10 s.seller_id,s.seller_city,s.seller_state,COUNT(oi.order_id) AS number_of_orders
+SELECT TOP 10 s.seller_id,s.seller_city,s.seller_state,COUNT(DISTINCT oi.order_id) AS number_of_orders
 FROM Sellers_Cleaned s
 JOIN Order_items_Cleaned oi ON oi.seller_id=s.seller_id
 GROUP BY s.seller_id,s.seller_city,s.seller_state
-ORDER BY COUNT(oi.order_id) DESC;
+ORDER BY number_of_orders DESC;
+
+---------------------------------------------------------
+-- STEP 6: SELLER PERFORMANCE (STRONG ADDITION)
+---------------------------------------------------------
+
+-- Seller revenue contribution
+SELECT 
+    s.seller_id,
+    COUNT(DISTINCT oi.order_id) AS total_orders,
+    ROUND(SUM(oi.price + oi.freight_value), 2) AS total_revenue
+FROM Sellers_Cleaned s
+JOIN Order_Items_Cleaned oi 
+    ON oi.seller_id = s.seller_id
+GROUP BY s.seller_id
+ORDER BY total_revenue DESC;
+
+---------------------------------------------------------
+-- FINAL CHECK
+---------------------------------------------------------
+
+SELECT * FROM Sellers_Cleaned;
 
 ---------------------------------------------------------
 -- STEP 8: ORDER_REVIEWS TABLE CLEANING
@@ -729,6 +1031,10 @@ FROM olist_order_reviews_dataset;
 
 SELECT * FROM Order_Reviews_Cleaned;
 
+---------------------------------------------------------
+-- STEP 1: DATA QUALITY CHECKS
+---------------------------------------------------------
+
 -- Check if there are any dublications in table
 -- There are no dublications
 SELECT review_id,order_id,review_score,review_comment_title,review_comment_message,review_creation_date,review_answer_timestamp,COUNT(*) AS occurrence
@@ -736,11 +1042,16 @@ FROM Order_Reviews_Cleaned
 GROUP BY review_id,order_id,review_score,review_comment_title,review_comment_message,review_creation_date,review_answer_timestamp
 HAVING COUNT(*) > 1;
 
+---------------------------------------------------------
+-- STEP 2: REVIEW ID ANALYSIS
+---------------------------------------------------------
+
 --Check nulls and dublications in review_id column
 -- There are no nulls in review_id column
 -- Multiple identical review_ids combined with different order_ids within the same timestamp 
--- indicate that customers may have received a single review survey link for separate orders, 
--- leading to multiple entries for one review. This is considered systematic data behavior, not an error
+-- Business Insight:
+-- Same review_id across multiple orders indicates a shared survey link
+-- This is expected system behavior, not a data issue
 SELECT review_id
 FROM Order_Reviews_Cleaned
 WHERE review_id IS NULL;
@@ -750,21 +1061,19 @@ FROM Order_Reviews_Cleaned
 GROUP BY review_id
 HAVING COUNT(*)>1 ;
 
-SELECT *
-FROM Order_Reviews_Cleaned
-WHERE review_id IN (
-    SELECT review_id
-    FROM Order_Reviews_Cleaned
-    GROUP BY review_id
-    HAVING COUNT(*) > 1
-)
+---------------------------------------------------------
+-- STEP 3: ORDER ID ANALYSIS
+---------------------------------------------------------
 
 --Check nulls and dublications in order_id column
 -- There are no nulls in order_id column
 --Multiple identical order_ids with distinct review_ids and the different answer_timestamp 
--- reflect a systematic behavior where the system generated separate review requests for different items 
--- within the same order, likely due to variations in product categories, shipping terms, or sellers. 
--- This is considered an acceptable data phenomenon.
+-- Business Insight:
+-- Multiple reviews per order may occur due to:
+-- Multiple items
+-- Different sellers
+-- Separate feedback requests
+-- This is valid behavior
 SELECT order_id
 FROM Order_Reviews_Cleaned
 WHERE order_id IS NULL;
@@ -774,18 +1083,9 @@ FROM Order_Reviews_Cleaned
 GROUP BY order_id
 HAVING COUNT(*)>1 ;
 
-SELECT *
-FROM Order_Reviews_Cleaned
-WHERE order_id IN (
-    SELECT order_id
-    FROM Order_Reviews_Cleaned
-    GROUP BY order_id
-    HAVING COUNT(*) > 1
-)
-
-SELECT * 
-FROM Order_Reviews_Cleaned
-WHERE order_id='826221f0c1a1915308dccb83b841eb2f'
+---------------------------------------------------------
+-- STEP 4: REVIEW SCORE VALIDATION
+---------------------------------------------------------
 
 --Check nulls in review_score
 --There are no nulls in review_score column
@@ -793,14 +1093,23 @@ SELECT review_score
 FROM Order_Reviews_Cleaned
 WHERE review_score IS NULL;
 
+-- Validate review score range
 SELECT DISTINCT review_score
 FROM Order_Reviews_Cleaned;
 
+-- Detect invalid scores
+SELECT *
+FROM Order_Reviews_Cleaned
+WHERE review_score < 1 OR review_score > 5;
+
+---------------------------------------------------------
+-- STEP 5: TEXT DATA HANDLING
+---------------------------------------------------------
+
 --Check nulls in review_comment_title and review_comment_message
 -- There are nulls in review_comment_title column
--- As Nulls in review_comment_title and review_comment_message are logically expected, 
--- as customers may provide a review score without adding written feedback. 
--- This is common behavior for optional fields
+-- Business Insight:
+-- Missing text fields are expected (optional feedback)
 SELECT review_comment_title
 FROM Order_Reviews_Cleaned
 WHERE review_comment_title IS NULL;
@@ -808,6 +1117,10 @@ WHERE review_comment_title IS NULL;
 SELECT review_comment_message
 FROM Order_Reviews_Cleaned
 WHERE review_comment_message IS NULL;
+
+---------------------------------------------------------
+-- STEP 6: DATE VALIDATION
+---------------------------------------------------------
 
 --Check nulls in review_creation_date
 --There are no nulls in review_creation_date column
@@ -821,8 +1134,50 @@ SELECT review_answer_timestamp
 FROM Order_Reviews_Cleaned
 WHERE review_answer_timestamp IS NULL;
 
-SELECT * FROM Order_Reviews_Cleaned;
+-- Ensure logical timeline (answer after creation)
+SELECT *
+FROM Order_Reviews_Cleaned
+WHERE review_answer_timestamp < review_creation_date;
 
+---------------------------------------------------------
+-- STEP 7: FEATURE ENGINEERING
+---------------------------------------------------------
+
+-- Create sentiment category
+ALTER TABLE Order_Reviews_Cleaned
+ADD review_sentiment NVARCHAR(20);
+
+UPDATE Order_Reviews_Cleaned
+SET review_sentiment =
+    CASE 
+        WHEN review_score >= 4 THEN 'positive'
+        WHEN review_score = 3 THEN 'neutral'
+        ELSE 'negative'
+    END;
+
+---------------------------------------------------------
+-- STEP 8: BUSINESS ANALYSIS
+---------------------------------------------------------
+
+-- Distribution of review sentiment
+SELECT 
+    review_sentiment,
+    COUNT(*) AS total_reviews
+FROM Order_Reviews_Cleaned
+GROUP BY review_sentiment;
+
+-- Average rating per order
+SELECT 
+    order_id,
+    ROUND(AVG(review_score),2) AS avg_review_score
+FROM Order_Reviews_Cleaned
+GROUP BY order_id;
+
+---------------------------------------------------------
+-- FINAL CHECK
+---------------------------------------------------------
+
+SELECT * FROM Order_Reviews_Cleaned;
 
 
 
