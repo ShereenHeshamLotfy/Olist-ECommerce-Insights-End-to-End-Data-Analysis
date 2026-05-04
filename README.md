@@ -55,7 +55,8 @@ The dashboard is structured into key business areas:
 - Customer base is highly concentrated in **São Paulo (~17%)**  
 - Customer satisfaction is generally high (majority 5-star ratings)
 
-<img width="1312" height="722" alt="Executive Overview" src="https://github.com/user-attachments/assets/e927bcb0-0c60-4dfa-af10-e7247e4d5ca8" />
+<img width="1319" height="731" alt="image" src="https://github.com/user-attachments/assets/2bcf2bad-e4c9-471b-93cd-c5e14569b07e" />
+
 
 ---
 
@@ -77,7 +78,8 @@ The dashboard is structured into key business areas:
 - Majority are new customers with low returning rate  
 - Customer segmentation shows **20% high-value customers**
 
-<img width="1313" height="722" alt="Customer Insights" src="https://github.com/user-attachments/assets/de81c4db-1d36-4324-8e68-e4e4ebd39ca1" />
+<img width="1315" height="729" alt="image" src="https://github.com/user-attachments/assets/97c2fb30-9f62-4ef8-be76-3d9e02c6ecc9" />
+
 
 ---
 
