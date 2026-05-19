@@ -47,7 +47,7 @@ This analysis aims to:
 
 ---
 
-# 🧱 Data Model (Star Schema)
+# 🧱 Data Model 
 
 ### ⭐ Fact Tables
 - Orders  
