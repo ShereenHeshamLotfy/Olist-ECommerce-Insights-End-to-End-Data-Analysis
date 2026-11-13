@@ -32,14 +32,14 @@ An end-to-end **Business Intelligence project** analyzing a real-world Brazilian
 
 ## 🧱 Data Architecture & Modeling
 
-Designed a scalable **Star Schema** in Power BI to optimize query performance and eliminate filter ambiguity:
+Designed a scalable Constellation Schema (Galaxy Schema) in Power BI to handle complex e-commerce relationships, optimize query performance, and eliminate filter ambiguity across multiple business processes.
 
 * **Fact Tables:** `Orders`, `Order_Items`, `Order_Payments`, `Order_Reviews`
 * **Dimension Tables:** `Customers`, `Products`, `Sellers`, `Date` (Custom Calendar Table)
 
 **Technical Highlights:**
-* Utilized `Orders` as a central bridge table to resolve many-to-many relationship ambiguities.
-* Implemented advanced **DAX measures** using `CALCULATE`, `CROSSFILTER`, and dynamic **Price Binning** to accurately evaluate category distribution across price tiers.
+* Centralized Orders as a core bridge table to manage relationships across multiple operational fact tables.
+* Implemented advanced DAX measures using CALCULATE, CROSSFILTER, and dynamic Price Binning to accurately evaluate category distribution across price tiers.
 
 ---
 
