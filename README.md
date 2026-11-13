@@ -1,224 +1,272 @@
-# E-Commerce Analytics Dashboard (Power BI)
+# 🛒 Olist E-Commerce Analytics  
+## End-to-End Business Intelligence Case Study
 
-📊 **End-to-End Data Analytics Dashboard** built with **Power BI** to analyze a Brazilian e-commerce dataset.  
-This dashboard provides actionable insights into sales performance, customer behavior, delivery efficiency, reviews & satisfaction, seller performance, and product analytics.
+A full-scale **Business Intelligence project** analyzing a real-world Brazilian e-commerce dataset to deliver **data-driven insights and actionable business recommendations**.
 
----
-
-## 🚀 Project Overview
-
-This project takes raw transactional data from a Brazilian e-commerce dataset and transforms it into meaningful business insights using:
-
-- **SQL** for data cleaning, transformation, and modeling  
-- **Power BI** for interactive dashboards and visual analytics  
-
-The data model follows a **Star Schema** design to support efficient analysis.
+This project demonstrates a complete analytics workflow:  
+**Raw Data → SQL Cleaning → Data Modeling → Power BI Dashboards → Business Insights**
 
 ---
 
-## 📦 Dataset Summary
+# 🚀 Executive Summary
 
-The dataset contains multiple tables:
+- 📦 **99K Orders**
+- 👥 **96K Customers**
+- 💰 **$16.01M Revenue**
+- 🏪 **~3K Sellers**
+- 📊 **74 Product Categories**
 
-| Table Name | Description |
-|------------|-------------|
-| Orders | Order-level metadata |
-| Order Items | Item-level details per order |
-| Order Payments | Payment method and value |
-| Order Reviews | Ratings and customer feedback |
-| Customers | Customer demographic data |
-| Sellers | Seller demographic data |
-| Products | Product information |
-| Date Table | Created manually for time-based analysis |
+📈 The business experienced **explosive growth in 2017 (+12,112%)**, followed by a **significant slowdown**, indicating potential challenges in **customer retention and market saturation**.
 
-<img width="1277" height="732" alt="image" src="https://github.com/user-attachments/assets/5b03a67e-0bd4-4be2-8d4f-cfa870c078e9" />
+⚠️ Key risks identified:
+- Low **customer retention**
+- Delivery **outliers impacting satisfaction**
+- Revenue **dependency on new customers**
 
 ---
 
-## 📊 Dashboard Pages / Analytical Views
+# 🧠 Business Objectives
 
-### 1️⃣ Overview Page
-**Key Metrics:**
-- Total Orders  
-- Total Revenue  
-- Total Customers  
-- Average Order Value  
-- Average Delivery Time  
+This analysis aims to:
 
-**Insights:**
-- Revenue over time  
-- Best-selling categories  
-- Order trends by status  
-- Regional performance  
-
-**Business Questions Answered:**
-- What are the overall business trends?  
-- Which category contributes most to revenue?  
-
-**Recommendations:**
-- Focus marketing on top-performing categories to increase revenue.  
-- Monitor underperforming regions for growth opportunities.  
-- Track overall business trends monthly for timely decision-making.
-  
-<img width="1312" height="722" alt="image" src="https://github.com/user-attachments/assets/e927bcb0-0c60-4dfa-af10-e7247e4d5ca8" />
-
+- Understand **revenue growth patterns**
+- Analyze **customer behavior & retention**
+- Evaluate **delivery performance efficiency**
+- Identify **top-performing products & sellers**
+- Improve **customer satisfaction & experience**
 
 ---
 
-### 2️⃣ Sales Performance
-**KPIs & Visuals:**
-- Revenue evolution trend  
-- Top categories  
-- Revenue by payment methods  
+# 🛠 Tech Stack
 
-**Questions Answered:**
-- Which payment methods are most popular?  
-- Which regions produce the highest revenue?  
-
-**Recommendations:**
-- Use targeted promotions for high-revenue regions.  
-- Optimize payment methods based on popularity to improve conversion.  
-- Consider dynamic pricing for top-performing products.
-
-<img width="1320" height="720" alt="image" src="https://github.com/user-attachments/assets/901810a6-416e-4bfe-a8f8-5efcea7ed152" />
+- **SQL Server** → Data Cleaning & Transformation  
+- **Power BI** → Data Visualization & Dashboards  
+- **DAX** → KPI Calculations  
+- **Power Query** → ETL  
+- **Star Schema** → Data Modeling  
 
 ---
 
-### 3️⃣ Customer Insights
-**KPIs:**
-- Customer count  
-- Revenue by customer segment  
-- New vs returning customers  
+# 🧱 Data Model 
 
-**Questions Answered:**
-- Who are the most valuable customers?  
-- How is retention over time?  
+### ⭐ Fact Tables
+- Orders  
+- Order Items  
 
-**Recommendations:**
-- Implement loyalty programs for high-value customers.  
-- Run follow-up campaigns for low-retention segments.  
-- Segment customers and personalize marketing strategies.
+### 📊 Dimension Tables
+- Customers  
+- Products  
+- Sellers  
+- Date  
 
-<img width="1313" height="722" alt="image" src="https://github.com/user-attachments/assets/de81c4db-1d36-4324-8e68-e4e4ebd39ca1" />
-
+✔ Built using **best practices**  
+✔ Eliminated ambiguity using **Orders as a bridge table**  
+✔ Optimized for **scalability & performance**
 
 ---
 
-### 4️⃣ Orders & Delivery Analysis
-**Metrics:**
-- On-time delivery rate  
-- Average and maximum delivery time  
-- Delivery outlier trends  
-
-**Questions Answered:**
-- How effectively are deliveries managed?  
-- Which regions show late delivery patterns?  
-
-**Recommendations:**
-- Optimize delivery routes to reduce average delivery times.  
-- Investigate late deliveries by region and seller.  
-- Use predictive models to plan for peak order periods.
-
-<img width="1336" height="677" alt="image" src="https://github.com/user-attachments/assets/e6892982-6d9f-4122-8c88-72f373ff8d42" />
-
+# 📊 Dashboard Insights
 
 ---
 
-### 5️⃣ Reviews & Satisfaction
-**KPIs:**
-- Average rating  
-- Net Promoter Score (NPS)  
-- Review distribution  
+## 1️⃣ Executive Overview
 
-**Questions Answered:**
-- How does delivery performance influence reviews?  
-- What percentage of customers are satisfied?  
+### 📌 KPIs
+- Total Orders → **99K**
+- Total Revenue → **$16.01M**
+- Customers → **96K**
+- Avg Order Value → **$161**
+- Avg Delivery Time → **11 Days** *(Excluding Outliers)*
 
-**Recommendations:**
-- Address recurring issues highlighted in negative reviews.  
-- Encourage satisfied customers to leave reviews.  
-- Correlate delivery time with review scores and improve areas with negative impact.
+### 🔍 Insights
+- Strong growth from **2016 → 2017 → 2018**
+- ~**97% successful deliveries**
+- High customer satisfaction (majority **5⭐ reviews**)
 
-<img width="1230" height="718" alt="image" src="https://github.com/user-attachments/assets/a7323eec-a99c-44d2-92c4-fab2fa1cee0d" />
-
+<img width="1323" height="724" alt="image" src="https://github.com/user-attachments/assets/1f2ad18e-231d-43c7-9271-155b424526f5" />
 
 ---
 
-### 6️⃣ Seller Performance
-**Metrics:**
-- Total sellers  
-- Seller revenue  
-- Units sold by seller & category  
+## 2️⃣ Sales Performance
 
-**Insights:**
-- Top performing sellers  
-- Revenue patterns per seller  
+### 🔍 Insights
+- Revenue growth peaked at **+12,112% (2017)**
+- Growth dropped to **~68% (2018)** → ⚠️ slowdown
+- **Credit Cards = 78%** of total revenue
 
-**Recommendations:**
-- Support low-performing sellers with training.  
-- Incentivize high-performing sellers for consistency.  
-- Track seller KPIs continuously to maintain quality.
+### 🏆 Top Categories by Revenue
+- Health & Beauty → **$1.45M**
+- Watches & Gifts → **$1.31M**
+- Bed & Bath Table → **$1.27M**
 
-<img width="1335" height="662" alt="image" src="https://github.com/user-attachments/assets/ba98dfc7-1645-46f1-a22f-6722a7899a02" />
+### ❗ Problem
+- Growth is **not sustainable**
 
+### 💡 Recommendation
+- Launch **retention-focused campaigns**
+- Improve **customer acquisition strategy**
+- Invest in **high-performing categories**
 
----
-
-### 7️⃣ Products & Category Analysis
-**Visuals:**
-- Price distribution  
-- Revenue by category  
-- Product performance  
-
-**Questions Answered:**
-- Which products bring the most revenue?  
-- What are the pricing trends across categories?  
-
-**Recommendations:**
-- Maintain sufficient stock of top-selling products.  
-- Review low-selling products for discounting or removal.  
-- Monitor pricing trends to remain competitive.
-
-<img width="1332" height="622" alt="image" src="https://github.com/user-attachments/assets/71122f7a-f1db-43b9-bb8f-d20aceb6db77" />
-
+<img width="1316" height="728" alt="image" src="https://github.com/user-attachments/assets/c38af6aa-7c9e-4c38-8134-051fc9538b82" />
 
 ---
 
-## 🛠 Tools & Technologies Used
+## 3️⃣ Customer Analysis
 
-| Technology | Purpose |
-|------------|---------|
-| SQL | Data cleaning & transformation |
-| Power BI | Dashboard visualization |
-| Power Query | Data modeling & ETL |
-| DAX | Custom analytics calculations |
+### 🔍 Insights
+- Customer growth:
+  - **0 → 44K → 53K**
+- Majority are **new customers**
+- Returning customers **decline sharply in 2018**
 
----
+### ❗ Problem
+- **Weak customer retention strategy**
 
-
-## 📁 How to Run the Dashboard
-
-1. Clone the repository  
-   `git clone https://github.com/ShereenHeshamLotfy/Olist-ECommerce-Insights-End-to-End-Data-Analysis.git`
-2. Open the `.pbix` Power BI file  
-3. Connect to the provided dataset files (.csv)
-4. Refresh all visuals to load data
-
----
-
-## 📎 References & Data Source
-
-The dataset is based on the **Olist Brazilian E‑commerce dataset**, publicly available on Kaggle (orders, products, reviews, customers, sellers, etc.).:contentReference[oaicite:1]{index=1}
+### 💡 Recommendation
+- Implement:
+  - Loyalty programs  
+  - Personalized offers  
+  - Email marketing campaigns
+    
+<img width="1313" height="726" alt="image" src="https://github.com/user-attachments/assets/3862e2bb-7003-41e6-89d0-15a735bf5c0b" />
 
 ---
 
-## 📄 License
+## 4️⃣ Orders & Delivery
 
-This project is shared under the **MIT License** (add LICENSE file).
+### 📌 KPIs
+- Delivered Orders → **96K**
+- Cancelled Orders → **~1K**
+- On-Time Delivery → **93.23%**
+- Max Delivery Time → **210 Days (!!)**
+
+### 🔍 Insights
+- Most deliveries are on time  
+- Small % of **extreme delays (outliers)**
+
+### ❗ Problem
+- Outliers significantly harm **customer experience**
+
+### 💡 Recommendation
+- Identify:
+  - Slow sellers  
+  - Problematic regions  
+- Optimize **logistics & SLAs**
+
+<img width="1311" height="673" alt="image" src="https://github.com/user-attachments/assets/ff895a2d-1be4-455c-b6e9-000c7bb63ea0" />
 
 ---
 
-## ⭐ Contributions
+## 5️⃣ Reviews & Satisfaction
 
-Contributions are welcome!  
-Feel free to open issues or submit pull requests.
+### 📌 KPIs
+- Total Reviews → **99K**
+- Avg Rating → **4.09 / 5**
+- Positive Reviews → **77%**
+- Negative Reviews → **14.7%**
+
+### 🔍 Insights
+- Strong correlation:
+  👉 **Late delivery → Low ratings**
+
+### 💡 Recommendation
+- Improve delivery performance  
+- Monitor low-rated orders proactively  
+
+<img width="1314" height="769" alt="image" src="https://github.com/user-attachments/assets/c388b3f3-26b8-4917-b81c-0701cbc027e6" />
+
+---
+
+## 6️⃣ Sellers Performance
+
+### 📌 KPIs
+- Total Sellers → **~3K**
+- Revenue → **$13.59M**
+- Freight Cost → **$2.25M**
+- Units Sold → **135K**
+
+### 🔍 Insights
+- Revenue distributed across many sellers  
+- No heavy seller dominance  
+
+### 💡 Recommendation
+- Rank sellers based on:
+  - Delivery performance  
+  - Customer satisfaction  
+- Incentivize top sellers  
+
+<img width="1315" height="661" alt="image" src="https://github.com/user-attachments/assets/c5f9e546-c86f-4cfd-b643-19f09c5e50d9" />
+
+---
+
+## 7️⃣ Products & Categories
+
+### 📌 KPIs
+- Total Products → **33K**
+- Categories → **74**
+- Avg Price → **$120.65**
+
+### 🔍 Insights
+- Top category by volume → **Bed Bath Table**
+- Highest avg price → **Computers (~$1098)**
+
+### ❗ Problem
+- High price variation  
+
+### 💡 Recommendation
+- Apply **price segmentation strategy**
+- Focus on **high-margin products**
+
+<img width="1312" height="550" alt="image" src="https://github.com/user-attachments/assets/fd1779e8-f972-4202-af25-ffbafe935a7e" />
+
+---
+
+# ⚠️ Data Challenges & Solutions
+
+| Challenge | Solution |
+|----------|--------|
+| Missing values | Replaced with averages |
+| Delivery outliers | Removed using statistical thresholds |
+| Null categories | Replaced with "Other" |
+| Relationship ambiguity | Designed Star Schema |
+| Duplicate reviews/orders | Treated as valid business behavior |
+
+---
+
+# 📈 Key Business Insights
+
+- 🚀 Explosive growth in 2017  
+- 💳 Credit cards dominate payments  
+- 👤 Customer retention is weak  
+- 🚚 Delivery directly impacts satisfaction  
+- 📦 Product performance varies significantly  
+
+---
+
+# 💡 Final Recommendations
+
+1. Improve **customer retention strategies**  
+2. Optimize **delivery & logistics performance**  
+3. Focus on **top-performing categories**  
+4. Monitor & evaluate **seller performance**  
+5. Use **customer segmentation for targeted marketing**  
+
+---
+
+# 📁 How to Run
+
+```bash
+git clone https://github.com/ShereenHeshamLotfy/Olist-ECommerce-Insights-End-to-End-Data-Analysis.git
+```
+
+1. Open `.pbix` file in Power BI  
+2. Reconnect data sources (Excel/CSV)  
+3. Click **Refresh**  
+
+---
+
+# 📌 Data Source
+
+**Olist Brazilian E-Commerce Dataset (Kaggle)**
+
+---
